@@ -4,7 +4,7 @@
 Homepage
 </x-slot:title>
 
-
+<x-nav></x-nav>
 
 
 
