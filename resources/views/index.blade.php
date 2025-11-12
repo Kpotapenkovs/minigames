@@ -4,6 +4,7 @@
 Homepage
 </x-slot:title>
 
+<<<<<<< HEAD
 
 
 
@@ -22,10 +23,20 @@ Homepage
         </tr>
     </table>
 </center>
+=======
+<x-nav></x-nav>
+>>>>>>> 866f93e4cf46e3290d9755fcfabe5f0d2719b114
 
 
 
+
+
+
+<<<<<<< HEAD
+</x-layout>
+=======
 
 
 
 </x-layout>
+>>>>>>> 866f93e4cf46e3290d9755fcfabe5f0d2719b114
