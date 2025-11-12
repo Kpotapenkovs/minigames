@@ -42,12 +42,14 @@ class TypingController extends Controller
             'nickname' => 'required|string|max:50',
             'mode' => 'required|string|in:easy,medium,hard,hardcore',
             'time' => 'required|numeric|min:0',
+             'wpm' => 'required|numeric|min:0'
         ]);
 
         DB::table('typing_game')->insert([
             'nickname' => $validated['nickname'],
             'mode' => $validated['mode'],
             'time' => $validated['time'],
+            'wpm' => $validated['wpm'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);

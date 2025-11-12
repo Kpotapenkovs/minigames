@@ -4,7 +4,6 @@
 Homepage
 </x-slot:title>
 
-<<<<<<< HEAD
 
 
 
@@ -16,27 +15,29 @@ Homepage
         <tr>
             <td>
                 <a href="{{ route('memoryCard') }}">Memory Card</a>
+
             </td>
             <td>
-                <a href="{{ route('typingGame') }}">Typing Game</a>
+
+               <a href="{{ route('minigames.index') }}">Sākums</a>
+
+
             </td>
+            <td>
+
+             <a href="{{ route('typingSpeed') }}">Typing Game</a>
+
+
+            </td>
+            
         </tr>
     </table>
 </center>
-=======
-<x-nav></x-nav>
->>>>>>> 866f93e4cf46e3290d9755fcfabe5f0d2719b114
 
 
 
-
-
-
-<<<<<<< HEAD
-</x-layout>
-=======
 
 
 
 </x-layout>
->>>>>>> 866f93e4cf46e3290d9755fcfabe5f0d2719b114
+

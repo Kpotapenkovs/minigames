@@ -22,13 +22,24 @@ body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; text
 .active { text-decoration: underline; }
 #info { margin-top:10px; }
 #resultForm { margin-top:20px; display:none; }
+nav ul { list-style:none; padding:0; display:flex; justify-content:center; gap:15px; }
+nav a { text-decoration:none; color:#000; font-weight:bold; }
+nav a:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
 
+<nav>
+    <ul>
+        <li><a href="{{ route('minigames.index') }}">Sākums</a></li>
+        <li><a href="{{ route('memoryCard') }}">Kāršu atmiņu spēle</a></li>
+    </ul>
+</nav>
+
 <h1>Typing Speed Test</h1>
 
 <div id="controls">
+    <p id="wpmResult"></p>
     <label for="mode">Difficulty:</label>
     <select id="mode">
         <option value="easy">Easy</option>
@@ -36,6 +47,14 @@ body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; text
         <option value="hard">Hard</option>
         <option value="hardcore">Hardcore</option>
     </select>
+
+    <label for="timeLimit">Time (seconds):</label>
+    <select id="timeLimit">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="30">30</option>
+    </select>
+
     <button id="startBtn">Start</button>
 </div>
 
@@ -62,10 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const nicknameInput = document.getElementById('nickname');
     const saveBtn = document.getElementById('saveBtn');
     const modeSelect = document.getElementById('mode');
+    const timeSelect = document.getElementById('timeLimit');
+    const wpmResult = document.getElementById('wpmResult');
 
     let text = '';
     let typed = '';
-    let startTime = null;
+    let timeLeft = 0;
     let timer = null;
 
     async function fetchText(mode) {
@@ -74,41 +95,34 @@ document.addEventListener('DOMContentLoaded', () => {
         return data.text;
     }
 
-    function startTimer() {
-        startTime = performance.now();
-        timer = setInterval(() => {
-            const elapsed = ((performance.now() - startTime)/1000).toFixed(2);
-            timeDisplay.textContent = elapsed;
-        }, 50);
-    }
-
-    function stopTimer() {
-        clearInterval(timer);
-        return ((performance.now() - startTime)/1000).toFixed(2);
-    }
-
     function renderText() {
         let html = '';
         let errors = 0;
-
         for (let i = 0; i < text.length; i++) {
             const char = text[i];
             if (i < typed.length) {
-                if (typed[i] === char) {
-                    html += `<span class="correct">${char}</span>`;
-                } else {
-                    html += `<span class="incorrect">${char}</span>`;
-                    errors++;
-                }
-            } else if (i === typed.length) {
-                html += `<span class="active">${char}</span>`;
-            } else {
-                html += char;
-            }
+                if (typed[i] === char) html += `<span class="correct">${char}</span>`;
+                else { html += `<span class="incorrect">${char}</span>`; errors++; }
+            } else if (i === typed.length) html += `<span class="active">${char}</span>`;
+            else html += char;
         }
-
         typingArea.innerHTML = html;
         errorsDisplay.textContent = errors;
+    }
+
+    function endTest() {
+        typingArea.contentEditable = false;
+        clearInterval(timer);
+
+        const totalTime = parseInt(timeSelect.value);
+        finalTime.textContent = totalTime;
+
+        const wordCount = typed.trim().split(/\s+/).length;
+        const timeMinutes = totalTime / 60;
+        const wpm = Math.round(wordCount / timeMinutes);
+
+        resultForm.style.display = 'block';
+        wpmResult.textContent = `Words per minute: ${wpm}`;
     }
 
     startBtn.addEventListener('click', async () => {
@@ -116,39 +130,38 @@ document.addEventListener('DOMContentLoaded', () => {
         typed = '';
         typingArea.contentEditable = true;
         typingArea.focus();
-        timeDisplay.textContent = '0.00';
         errorsDisplay.textContent = 0;
         resultForm.style.display = 'none';
-        startTimer();
+        wpmResult.textContent = '';
+
+        timeLeft = parseInt(timeSelect.value);
+        timeDisplay.textContent = timeLeft.toFixed(2);
         renderText();
+
+        timer = setInterval(() => {
+            timeLeft -= 0.1;
+            if (timeLeft <= 0) endTest();
+            else timeDisplay.textContent = timeLeft.toFixed(2);
+        }, 100);
     });
 
     typingArea.addEventListener('keydown', (e) => {
-        e.preventDefault(); // kontrolē rakstīšanu pašam
+        e.preventDefault();
+        if (!text || !typingArea.isContentEditable) return;
 
-        if (!text) return;
-
-        if (e.key.length === 1) {
-            // rakstāms burts
-            typed += e.key;
-        } else if (e.key === 'Backspace') {
-            typed = typed.slice(0, -1);
-        }
+        if (e.key.length === 1) typed += e.key;
+        else if (e.key === 'Backspace') typed = typed.slice(0, -1);
 
         renderText();
-
-        if (typed === text) {
-            const totalTime = stopTimer();
-            typingArea.contentEditable = false;
-            finalTime.textContent = totalTime;
-            resultForm.style.display = 'block';
-        }
     });
 
     saveBtn.addEventListener('click', async () => {
         const nickname = nicknameInput.value.trim();
         const mode = modeSelect.value;
-        const time = parseFloat(finalTime.textContent);
+        const totalTime = parseInt(timeSelect.value);
+        const wordCount = typed.trim().split(/\s+/).length;
+        const wpm = Math.round(wordCount / (totalTime/60));
+
         if (!nickname) { alert('Enter nickname'); return; }
 
         const res = await fetch('/typinggame/save', {
@@ -157,17 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type':'application/json',
                 'X-CSRF-TOKEN':'{{ csrf_token() }}'
             },
-            body: JSON.stringify({nickname, mode, time})
+            body: JSON.stringify({nickname, mode, time: totalTime, wpm })
         });
 
         if(res.ok){
-            alert('Score saved!');
+            alert(`Score saved! Your WPM: ${wpm}`);
             nicknameInput.value='';
             resultForm.style.display='none';
-        } else {
-            alert('Error saving score.');
-        }
+        } else alert('Error saving score.');
     });
+
 });
 </script>
 
