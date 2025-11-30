@@ -8,17 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class TypingController extends Controller
 {
-    /**
-     * Parāda spēles sākuma lapu
-     */
+public function checkNickname(Request $request)
+{
+    $nickname = $request->input('nickname');
+
+    $exists = DB::table('typing_game')->where('nickname', $nickname)->exists();
+
+    return response()->json(['exists' => $exists]);
+}
+
+
     public function index()
     {
         return view('typinggame.index');
     }
 
-    /**
-     * Atgriež random tekstu no DB (pēc mode)
-     */
+
     public function randomText($mode)
     {
         $text = DB::table('typing_texts')
@@ -33,21 +38,21 @@ class TypingController extends Controller
         return response()->json(['text' => $text->text]);
     }
 
-    /**
-     * Saglabā spēles rezultātu DB
-     */
+
     public function saveResult(Request $request)
     {
         $validated = $request->validate([
             'nickname' => 'required|string|max:50',
             'mode' => 'required|string|in:easy,medium,hard,hardcore',
             'time' => 'required|numeric|min:0',
+             'wpm' => 'required|numeric|min:0'
         ]);
 
         DB::table('typing_game')->insert([
             'nickname' => $validated['nickname'],
             'mode' => $validated['mode'],
             'time' => $validated['time'],
+            'wpm' => $validated['wpm'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('nickname');
             $table->float('time');
             $table->enum('mode', ['easy', 'medium', 'hard', 'hardcore']);
+            $table->float('wpm')->nullable();
             $table->timestamps();
         });
     }

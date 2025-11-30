@@ -3,18 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TypingController;
 use App\Http\Controllers\MinigamesController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\CardGameController;
 
-// 🎮 Galvenā minigame lapa
 Route::get('/', [MinigamesController::class, 'index'])->name('minigames.index');
+Route::post('/typinggame/check-nickname', [TypingController::class, 'checkNickname'])->name('typing.checkNickname');
 
-// 🧠 Typing spēle - sākuma skats
-Route::get('/typingspeed', [TypingController::class, 'index'])->name('typing.index');
+Route::get('/memorycard', [TypeController::class, 'memorycard'])->name('memoryCard');
 
-// 🔀 Saņem random tekstu pēc izvēlētā mode (AJAX)
+Route::get('/typingspeed', [TypingController::class, 'index'])->name('typingSpeed');
+
 Route::get('/typinggame/random/{mode}', [TypingController::class, 'randomText'])->name('typing.random');
 
-// 💾 Saglabā spēles rezultātu (AJAX)
 Route::post('/typinggame/save', [TypingController::class, 'saveResult'])->name('typing.save');
 
 // ♠️ Kāršu spēle - sākuma skats
