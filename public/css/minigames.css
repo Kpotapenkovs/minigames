@@ -1,0 +1,97 @@
+/* =========================
+   General Body & Layout
+========================= */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #a8edea, #fed6e3); /* same soft gradient as main page */
+    color: #033649;
+}
+
+/* =========================
+   Page Heading
+========================= */
+h2 {
+    font-size: 2rem;
+    margin-top: 40px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* =========================
+   Navigation / x-nav
+========================= */
+x-nav, nav ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+x-nav a, nav a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #033649;
+    background-color: rgba(168, 237, 234, 0.7); /* soft green-blue */
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+x-nav a:hover, nav a:hover {
+    background-color: #a8edea;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Table Styling
+========================= */
+table {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+td {
+    background-color: rgba(255,255,255,0.2);
+    padding: 20px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Table links */
+td a {
+    color: #033649;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+td a:hover {
+    color: #00796b;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media screen and (max-width: 600px) {
+    table, td {
+        display: block;
+        width: 90%;
+        margin: 10px auto;
+        text-align: center;
+    }
+}

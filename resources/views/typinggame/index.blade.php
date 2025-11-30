@@ -3,36 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Typing Game</title>
-<style>
-body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; text-align:center; }
-#controls { margin-bottom:20px; }
-#typingArea { 
-    width:100%; 
-    min-height:120px; 
-    font-size:18px; 
-    line-height:1.5; 
-    border:1px solid #ccc; 
-    padding:10px; 
-    white-space: pre-wrap; 
-    text-align:left; 
-    font-family: monospace;
-}
-.correct { color: green; }
-.incorrect { color: red; }
-.active { text-decoration: underline; }
-#info { margin-top:10px; }
-#resultForm { margin-top:20px; display:none; }
-nav ul { list-style:none; padding:0; display:flex; justify-content:center; gap:15px; }
-nav a { text-decoration:none; color:#000; font-weight:bold; }
-nav a:hover { text-decoration:underline; }
-</style>
+<link rel="stylesheet" href="{{ asset('css/typinggame.css') }}">
 </head>
 <body>
 
 <nav>
     <ul>
         <li><a href="{{ route('minigames.index') }}">Sākums</a></li>
-        <li><a href="{{ route('memoryCard') }}">Kāršu atmiņu spēle</a></li>
+        <li><a href="{{ route('memoryCard') }}">Memory Card</a></li>
     </ul>
 </nav>
 
@@ -160,9 +138,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = modeSelect.value;
         const totalTime = parseInt(timeSelect.value);
         const wordCount = typed.trim().split(/\s+/).length;
-        const wpm = Math.round(wordCount / (totalTime/60));
+        const wpm = Math.round(wordCount / (totalTime / 60));
 
         if (!nickname) { alert('Enter nickname'); return; }
+
+        // Check if nickname is unique
+        const check = await fetch('/typinggame/check-nickname', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ nickname })
+        });
+
+        const data = await check.json();
+        if (data.exists) {
+            alert('This nickname is already used! Choose a different one.');
+            return;
+        }
 
         const res = await fetch('/typinggame/save', {
             method: 'POST',
@@ -179,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
             resultForm.style.display='none';
         } else alert('Error saving score.');
     });
-
 });
 </script>
 

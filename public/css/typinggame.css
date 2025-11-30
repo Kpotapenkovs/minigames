@@ -1,0 +1,128 @@
+/* =========================
+   General Body & Layout
+========================= */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #a8edea, #fed6e3); /* same soft gradient as main page */
+    color: #033649;
+}
+
+/* =========================
+   Navigation
+========================= */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #033649;
+    background-color: rgba(168, 237, 234, 0.7);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+nav a:hover {
+    background-color: #a8edea;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Controls
+========================= */
+#controls {
+    margin-bottom: 20px;
+}
+
+#controls label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* =========================
+   Typing Area
+========================= */
+#typingArea {
+    width: 90%;
+    max-width: 700px;
+    min-height: 120px;
+    font-size: 18px;
+    line-height: 1.5;
+    border: 2px solid #00c3a0;
+    padding: 10px;
+    white-space: pre-wrap;
+    text-align: left;
+    font-family: monospace;
+    border-radius: 10px;
+    background-color: rgba(224, 247, 244, 0.8);
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+}
+
+.correct { color: green; font-weight: bold; }
+.incorrect { color: red; font-weight: bold; }
+.active { text-decoration: underline; }
+
+/* =========================
+   Info & Results
+========================= */
+#info {
+    margin-top: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+#resultForm {
+    margin-top: 20px;
+    display: none;
+}
+
+#resultForm input {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #00c3a0;
+    margin-right: 10px;
+}
+
+button {
+    padding: 8px 15px;
+    background-color: #00c3a0;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #028f74;
+    transform: translateY(-1px);
+}
+
+
+@media screen and (max-width: 600px) {
+    #typingArea, #timerBarContainer {
+        width: 90%;
+    }
+
+    #controls label, #controls select, #controls button {
+        display: block;
+        margin: 5px auto;
+    }
+}
