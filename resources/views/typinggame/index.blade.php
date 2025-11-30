@@ -10,7 +10,7 @@
 <nav>
     <ul>
         <li><a href="{{ route('minigames.index') }}">Sākums</a></li>
-        <li><a href="{{ route('memoryCard') }}">Memory Card</a></li>
+        <li><a href="{{ route('card-game') }}">Memory Card</a></li>
     </ul>
 </nav>
 

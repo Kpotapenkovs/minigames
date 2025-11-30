@@ -14,7 +14,7 @@ Homepage
     <table border="1" cellpadding="10">
         <tr>
             <td>
-                <a href="{{ route('memoryCard') }}">Memory Card</a>
+                <a href="{{ route('card-game') }}">Memory Card</a>
 
             </td>
             <td>

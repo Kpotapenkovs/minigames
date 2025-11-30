@@ -7,6 +7,14 @@
     @vite(['resources/css/card-game.css'])
 </head>
 <body>
+
+<nav>
+    <ul>
+        <li><a href="{{ route('minigames.index') }}">Sākums</a></li>
+        <li><a href="{{ route('typingSpeed') }}">typing speed game</a></li>
+    </ul>
+</nav>
+
     <header>
         <h1>Memory Card Game</h1>
         <div class="stats">
